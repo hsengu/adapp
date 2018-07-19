@@ -172,7 +172,23 @@ namespace ADapp
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("An exception was thrown because:\n" + ex.Message);
+                try
+                {
+                    using (DirectoryEntry entry = new DirectoryEntry("LDAP://CN=" + computerName + domainList.domains[domainID].DNcomputer2,
+                                 userid, password, AuthenticationTypes.Secure))
+                    {
+                        string descrip = Description.Text;
+                        entry.InvokeSet("description", descrip);   //Uncomment and modify this line if you want to play around
+                        entry.CommitChanges();
+                        entry.Close();
+
+                        System.Windows.MessageBox.Show("Successfully changed description");
+                    }
+                }
+                catch (Exception exc)
+                {
+                    System.Windows.MessageBox.Show("An exception was thrown because:\n" + exc.Message);
+                }
             }
         }
 
