@@ -58,9 +58,27 @@ namespace ADapp
                     Description.Text = entry.Properties["Description"].Value.ToString();
                     entry.Close();
                 }
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("An exception was thrown because:\n" + ex.Message);
+                try
+                {
+                    using (DirectoryEntry entry = new DirectoryEntry("LDAP://CN=" + computerName + domainList.domains[domainID].DNcomputer2,
+                                 userid, password, AuthenticationTypes.Secure))
+                    {
+                        OS.Text = entry.Properties["OperatingSystem"].Value.ToString() + " " + entry.Properties["OperatingSystemVersion"].Value.ToString();
+                        if (entry.Properties.Contains("ManagedBy"))
+                            ManagedBy.Text = entry.Properties["ManagedBy"].Value.ToString();
+                        else
+                            ManagedBy.Text = "";
+                        Description.Text = entry.Properties["Description"].Value.ToString();
+                        entry.Close();
+                    }
+                }
+                catch (Exception exc)
+                {
+                    System.Windows.MessageBox.Show("An exception was thrown because:\n" + exc.Message);
+                }
             }
         }
 
@@ -191,7 +209,37 @@ namespace ADapp
             }
             catch (System.DirectoryServices.DirectoryServicesCOMException ex)
             {
-                System.Windows.MessageBox.Show("An exception was thrown because:\n" + ex.Message);
+                try
+                {
+                    using (DirectoryEntry entry = new DirectoryEntry("LDAP://CN=" + computerName + domainList.domains[domainID].DNcomputer2,
+                                 userid, password, AuthenticationTypes.Secure))
+                    {
+                        string useradm = useradm_assign.Text;
+                        string tempStr;
+                        DirectoryEntry entry2 = new DirectoryEntry("LDAP://CN=" + useradm + domainList.domains[domainID].DNuser, userid, password, AuthenticationTypes.Secure);
+
+                        entry.Properties["managedby"].Clear();
+                        entry.Properties["managedby"].Add(entry2.Properties["distinguishedname"].Value);
+                        //System.Windows.MessageBox.Show("An exception was thrown because:\n" + entry);
+                        tempStr = editRemove(entry.Properties["description"].Value.ToString());
+                        tempStr = editAdd(tempStr);
+                        entry.Properties["description"].Clear();
+                        entry.Properties["description"].Add(tempStr);
+                        entry.CommitChanges();
+                        Description.Text = entry.Properties["description"].Value.ToString();
+                        if (entry.Properties.Contains("ManagedBy"))
+                            ManagedBy.Text = entry.Properties["ManagedBy"].Value.ToString();
+                        else
+                            ManagedBy.Text = "";
+                        entry.Close();
+
+                        System.Windows.MessageBox.Show("Added " + useradm + " as admin for " + computerName);
+                    }
+                }
+                catch (Exception exc)
+                {
+                    System.Windows.MessageBox.Show("An exception was thrown because:\n" + exc.Message);
+                }
             }
         }
 
@@ -221,7 +269,30 @@ namespace ADapp
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show("An exception was thrown because:\n" + ex.Message);
+                try
+                {
+                    using (DirectoryEntry entry = new DirectoryEntry("LDAP://CN=" + computerName + domainList.domains[domainID].DNcomputer2,
+                                 userid, password, AuthenticationTypes.Secure))
+                    {
+                        string tempStr;
+                        entry.Properties["managedby"].Clear();
+                        tempStr = editRemove(entry.Properties["description"].Value.ToString());
+                        entry.Properties["description"].Clear();
+                        entry.Properties["description"].Add(tempStr);
+                        entry.CommitChanges();
+                        Description.Text = entry.Properties["description"].Value.ToString();
+                        if (entry.Properties.Contains("ManagedBy"))
+                            ManagedBy.Text = entry.Properties["ManagedBy"].Value.ToString();
+                        else
+                            ManagedBy.Text = "";
+                        System.Windows.MessageBox.Show("Removed admin for " + computerName);
+                        entry.Close();
+                    }
+                }
+                catch (Exception exc)
+                {
+                    System.Windows.MessageBox.Show("An exception was thrown because:\n" + exc.Message);
+                }
             }
         }
 

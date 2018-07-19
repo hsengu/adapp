@@ -5,6 +5,7 @@ namespace ADapp
     public class Address
     {
         public string DNcomputer { get; set; }
+        public string DNcomputer2 { get; set; }
         public string DNuser { get; set; }
     }
 

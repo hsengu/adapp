@@ -10,8 +10,8 @@
 		<DNuser>,OU=Users,OU=IT,OU=SantaClara,OU=AdminUnits,DC=nala,DC=roche,DC=com</DNuser>
 	</Address>
 	<Address>
-		<DNcomputer>,OU=WindowsClients,OU=ClientsSmart,OU=IT,OU=LosGatos,OU=AdminUnits,DC=nala,DC=roche,DC=com</DNcomputer>
-		<DNuser>,OU=Users,OU=IT,OU=LosGatos,OU=AdminUnits,DC=nala,DC=roche,DC=com</DNuser>
+		<DNcomputer>,OU=WindowsClients,OU=ClientsSmart,OU=ITDIA,OU=LosGatos,OU=AdminUnits,DC=nala,DC=roche,DC=com</DNcomputer>
+		<DNuser>,OU=Users,OU=ITDIA,OU=LosGatos,OU=AdminUnits,DC=nala,DC=roche,DC=com</DNuser>
 	</Address>
 	<Address>
 		<DNcomputer>,OU=WindowsClients,OU=ClientsSmart,OU=IT,OU=SanJose,OU=AdminUnits,DC=nala,DC=roche,DC=com</DNcomputer>
